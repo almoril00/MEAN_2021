@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script src="./jquery.js" type="application/javascript"></script>    
+    <script src="./09_Libreria.js" type="application/javascript"></script>    
+
+</head>
+
+<script type="application/javascript">
+
+function obtenerListaUsuarios(){
+
+    //https://reqres.in/api/users?delay=10
+
+    //Directamente con javascript
+    /*
+    let xhr = new XMLHttpRequest()
+    xhr.open('GET', 'https://jsonplaceholder.typicode.com/users/12345')
+    xhr.onload = function(){
+        if(this.status != 200)
+            console.log("NO HA SIDO UN 200!!!")
+            return
+        }
+        rellenarTabla(JSON.parse(this.responseText))
+    }
+    xhr.onerror = function(){
+        procesarError('ZASCA!')
+    }    
+    xhr.send()
+    */   
+
+    //Manera antigua:
+    //JQUery invoca la función success pasando como primer parámetro
+    //el contenido del body de la respuesta
+    //Si ha sido Content-type:app/json hace el JSON.parse por nosotros    
+    /*
+    $.ajax({
+        type  : 'GET', //Por defecto es GET
+        url   : 'https://jsonplaceholder.typicode.com/users/12345', //Por defecto es '/'
+        async : true,  //Por defecto es true
+        success  : rellenarTabla,
+        error    : procesarError,
+        complete : movida
+    })
+    */
+    
+    //Manera actual
+    $.ajax({
+        type  : 'GET', //Por defecto es GET
+        url   : 'https://jsonplaceholder.typicode.com/users', //Por defecto es '/'
+        async : true  //Por defecto es true
+    })
+    .done(rellenarTabla) //Solo se llama si ha sido un 200
+    .fail(procesarError) 
+    .always(movida)      //Siempre se invoca
+
+    //Tambien disponemos de las funciones
+    //$.get
+    //$.post
+    //$.put
+    //$.delete
+
+    //Para envíar una peticion POST con un JSON en el body
+    //usando jQuery:
+    /*
+    $.ajax( {
+            type        : 'POST', 
+            url         : '...',
+            contentType : 'application/json'
+            data        : JSON.stringify(objeto),
+        })
+        .done( f )
+        .fail( f )
+    */
+    
+}
+
+function rellenarTabla(usuarios){
+    console.log(arguments)
+    console.log(usuarios)
+
+    let tabla = generarTabla(usuarios, {
+        columnas : [  "Nombre", "Teléfono", "Correo E", "Ciudad"],
+        propiedades : [ "name", "phone", "email", "address.city" ],
+        idTabla : "tablaUsuarios"
+    })
+    $("#divTablaUsuarios").append(tabla)
+
+}
+
+function procesarError(error){
+    console.log("Error!", error)    
+}
+
+function movida(){
+    console.log("Complete...")
+}
+
+$(inicializar)
+function inicializar(){
+    $("#btnListar").click(obtenerListaUsuarios)
+}
+
+</script>
+
+<body>
+
+    <h1>18_JQuery_AJAX</h1>
+
+    <hr/>
+
+    <p align="center">
+        <button id="btnListar">Listar usuarios</button>
+    </p>
+
+    <div id="mensaje"></div>
+
+    <div id="divTablaUsuarios"></div>
+       
+</body>
+
+
+</html>

@@ -1,0 +1,25 @@
+<h2 class="text-center">Cesta</h2>
+
+
+<div *ngFor="let dp of cesta.detalles">
+    <!--Le pasamos a cada detallePedidoComponent el detalle que tiene que mostrar y la cesta a la que pertenece-->
+    <app-detallePedido [detalle]="dp" [cesta]="cesta"></app-detallePedido>
+</div>
+
+<div *ngIf="cesta.detalles.length==0">
+    <h2 class="text-center">No hay productos en la cesta</h2>
+</div>
+
+<br/>
+
+<div *ngIf="mensaje" class="alert alert-danger">{{mensaje}}</div>
+
+<div class="d-flex justify-content-center mt-4 mb-4">
+    <h4>
+        Total {{ cesta.total }} €
+        <input type="button" value="Guardar" (click)="guardar()" class="btn btn-primary ml-2" style="width:110px"/>
+        <button class="btn btn-primary ml-2" (click)="comprar()">Comprar</button>
+        <button class="btn btn-danger ml-2" (click)="vaciarCesta()">Vaciar</button>
+    </h4>
+</div>
+
